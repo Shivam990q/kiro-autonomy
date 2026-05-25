@@ -1,0 +1,193 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-json:
+    name: Validate example settings JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON
+        run: |
+          set -e
+          for f in examples/*.json; do
+            echo "-> $f"
+            python3 -c "import json,sys; json.load(open(sys.argv[1])); print('  ok')" "$f"
+          done
+
+  lint-markdown:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - name: Install markdownlint-cli
+        run: npm i -g markdownlint-cli@0.41.0
+      - name: Run markdownlint
+        run: markdownlint '**/*.md' --ignore node_modules --config .markdownlint.jsonc
+
+  lint-shellcheck:
+    name: Lint shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y shellcheck
+          shellcheck scripts/enable-kiro-autonomy.sh scripts/install.sh
+
+  lint-powershell:
+    name: Lint PowerShell
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Install-Module PSScriptAnalyzer -Force -Scope CurrentUser -SkipPublisherCheck
+          $issues = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Error,Warning
+          if ($issues) {
+            $issues | Format-Table -AutoSize
+            Write-Host "$($issues.Count) issue(s) found." -ForegroundColor Red
+            exit 1
+          }
+          Write-Host "PSScriptAnalyzer: clean."
+
+  smoke-test-pwsh:
+    name: Smoke test (PowerShell)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run installer test suite
+        shell: pwsh
+        run: ./tests/Test-Script.ps1
+
+  smoke-test-bash:
+    name: Smoke test (bash + jq)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install jq
+          else
+            sudo apt-get update -y
+            sudo apt-get install -y jq
+          fi
+      - name: Test bash installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x scripts/enable-kiro-autonomy.sh
+          WORK=$(mktemp -d)
+          SETTINGS="$WORK/settings.json"
+
+          echo "::group::maximum recipe"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe maximum --quiet
+          jq -e '."kiroAgent.agentAutonomy" == "Autopilot"' "$SETTINGS"
+          jq -e '."kiroAgent.trustedTools"   == ["*"]'      "$SETTINGS"
+          jq -e '."kiroAgent.trustedCommands"== ["*"]'      "$SETTINGS"
+          echo "::endgroup::"
+
+          echo "::group::aggressive recipe"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe aggressive --quiet
+          jq -e '."kiroAgent.trustedCommands" | any(. == "*") | not' "$SETTINGS"
+          jq -e '."kiroAgent.trustedCommands" | any(. == "git status")' "$SETTINGS"
+          echo "::endgroup::"
+
+          echo "::group::conservative recipe"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe conservative --quiet
+          jq -e '."kiroAgent.agentAutonomy" == "Supervised"' "$SETTINGS"
+          jq -e '."kiroAgent.trustedTools"  | any(. == "read_file")' "$SETTINGS"
+          echo "::endgroup::"
+
+          echo "::group::reset recipe"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe reset --quiet
+          jq -e 'has("kiroAgent.agentAutonomy")   | not' "$SETTINGS"
+          jq -e 'has("kiroAgent.trustedTools")    | not' "$SETTINGS"
+          jq -e 'has("kiroAgent.trustedCommands") | not' "$SETTINGS"
+          echo "::endgroup::"
+
+          echo "::group::existing settings preserved"
+          echo '{"editor.fontSize": 14}' > "$SETTINGS"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe maximum --quiet
+          jq -e '."editor.fontSize" == 14' "$SETTINGS"
+          jq -e '."kiroAgent.trustedCommands" == ["*"]' "$SETTINGS"
+          echo "::endgroup::"
+
+          echo "::group::restore reverts"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --restore --quiet
+          jq -e '."editor.fontSize" == 14' "$SETTINGS"
+          jq -e 'has("kiroAgent.trustedCommands") | not' "$SETTINGS"
+          echo "::endgroup::"
+
+          echo "::group::dry-run does not write"
+          echo '{"a":1}' > "$SETTINGS"
+          BEFORE=$(md5sum "$SETTINGS" | awk '{print $1}')
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe maximum --dry-run --quiet > /dev/null
+          AFTER=$(md5sum "$SETTINGS" | awk '{print $1}')
+          test "$BEFORE" = "$AFTER"
+          echo "::endgroup::"
+
+          rm -rf "$WORK"
+
+  smoke-test-bash-python-fallback:
+    name: Smoke test (bash + python3 fallback, no jq)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Disable jq for this job
+        run: |
+          # Hide jq so the installer's `have jq` check fails and falls back to python3
+          if command -v jq >/dev/null 2>&1; then
+            sudo mv "$(command -v jq)" "$(command -v jq).disabled"
+          fi
+          # Verify
+          if command -v jq >/dev/null 2>&1; then
+            echo "FAIL: jq is still on PATH"
+            exit 1
+          fi
+          command -v python3
+      - name: Test python3 fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x scripts/enable-kiro-autonomy.sh
+          WORK=$(mktemp -d)
+          SETTINGS="$WORK/settings.json"
+          ./scripts/enable-kiro-autonomy.sh --settings-path "$SETTINGS" --recipe maximum --quiet
+          python3 - "$SETTINGS" <<'PY'
+          import json, sys
+          d = json.load(open(sys.argv[1]))
+          assert d['kiroAgent.agentAutonomy']    == 'Autopilot',    d
+          assert d['kiroAgent.trustedTools']     == ['*'],          d
+          assert d['kiroAgent.trustedCommands']  == ['*'],          d
+          print('python3 fallback: ok')
+          PY
+          rm -rf "$WORK"
+      - name: Restore jq
+        if: always()
+        run: |
+          if [[ -e /usr/bin/jq.disabled ]]; then
+            sudo mv /usr/bin/jq.disabled /usr/bin/jq
+          fi
