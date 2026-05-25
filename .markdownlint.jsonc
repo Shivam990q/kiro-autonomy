@@ -37,5 +37,9 @@
     "MD042": false,
 
     // README intro skips h2 by design
-    "MD001": false
+    "MD001": false,
+
+    // link-fragments: GitHub correctly resolves emoji-prefixed heading anchors,
+    // but markdownlint's slugger is stricter. Suppress to match real rendering.
+    "MD051": false
 }

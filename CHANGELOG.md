@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - FAQ (`docs/FAQ.md`)
 - Four ready-to-paste example settings files
 - GitHub issue templates and CI workflow
-- Smoke tests (`tests/Test-Script.ps1`) â€” 28 PowerShell assertions across 11 scenarios
+- Smoke tests (`tests/Test-Script.ps1`) — 28 PowerShell assertions across 11 scenarios
 
 ### Tested
 - PowerShell installer: 28/28 assertions pass

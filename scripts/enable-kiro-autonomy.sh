@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # ============================================================
 #  Kiro Autonomy installer - macOS / Linux
 #  Project: https://github.com/Shivam990q/kiro-autonomy

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # One-liner remote installer for Kiro Autonomy on macOS / Linux.
 #
 #   curl -fsSL https://raw.githubusercontent.com/Shivam990q/kiro-autonomy/main/scripts/install.sh | bash

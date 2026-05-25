@@ -1,24 +1,24 @@
-﻿# Contributing
+# Contributing
 
 Thanks for considering a contribution. This project stays useful only because the community keeps it accurate as Kiro evolves.
 
 ## How to help
 
-### ðŸ› Bug reports
+### 🐛 Bug reports
 Open an [issue](https://github.com/Shivam990q/kiro-autonomy/issues/new?template=bug_report.md). Include:
-- Your OS and Kiro version (`Help â†’ About`)
+- Your OS and Kiro version (`Help → About`)
 - The `kiro.kiro-agent` extension version (visible in the Extensions view)
 - The exact contents of your `settings.json` (with secrets redacted)
 - What you expected vs. what happened
-- Output from `Output` panel â†’ `Kiro Agent` if relevant
+- Output from `Output` panel → `Kiro Agent` if relevant
 
-### ðŸ’¡ Feature ideas / new recipes
+### 💡 Feature ideas / new recipes
 Open an [issue](https://github.com/Shivam990q/kiro-autonomy/issues/new?template=feature_request.md) describing the workflow and what you'd want trusted.
 
-### ðŸ“ Documentation fixes
+### 📝 Documentation fixes
 PRs welcome for typos, clarifications, screenshots, translations.
 
-### ðŸ§ª New Kiro version verification
+### 🧪 New Kiro version verification
 When a new Kiro version ships, the matcher logic might change. To verify:
 
 1. Run the commands in [docs/VERIFICATION.md](docs/VERIFICATION.md)

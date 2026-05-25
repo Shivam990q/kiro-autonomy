@@ -1,4 +1,4 @@
-﻿# Security Policy
+# Security Policy
 
 ## Reporting a vulnerability
 
@@ -27,9 +27,9 @@ If you find a way for these to misbehave, leak data, or alter unintended files, 
 
 ## Out of scope
 
-- Bugs in Kiro itself â€” please report those to the Kiro team
-- General complaints about the philosophy of `trustedCommands: ["*"]` â€” see [docs/SECURITY.md](docs/SECURITY.md) for the considered tradeoffs
+- Bugs in Kiro itself — please report those to the Kiro team
+- General complaints about the philosophy of `trustedCommands: ["*"]` — see [docs/SECURITY.md](docs/SECURITY.md) for the considered tradeoffs
 
 ## See also
 
-- [docs/SECURITY.md](docs/SECURITY.md) â€” risk discussion and mitigations for full-trust mode
+- [docs/SECURITY.md](docs/SECURITY.md) — risk discussion and mitigations for full-trust mode
