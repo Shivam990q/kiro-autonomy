@@ -118,8 +118,7 @@ kiro-autonomy/
 │   ├── enable-kiro-autonomy.sh       ← bash installer (macOS / Linux)
 │   ├── enable-kiro-autonomy.bat      ← double-click launcher (Windows)
 │   ├── install.ps1                   ← one-liner remote installer (Windows)
-│   ├── install.sh                    ← one-liner remote installer (Unix)
-│   └── set-repo-owner.ps1            ← replaces Shivam990q placeholder before pushing
+│   └── install.sh                    ← one-liner remote installer (Unix)
 ├── examples/
 │   ├── settings.maximum.json         ← trust everything (this repo's default)
 │   ├── settings.aggressive.json      ← trust common dev commands only
@@ -208,13 +207,9 @@ Kinds of contributions especially appreciated:
 
 ## 🚢 Publishing your fork
 
-If you cloned this repo and want to publish under your own GitHub account:
+If you cloned this repo and want to publish under your own GitHub account, find-and-replace `Shivam990q` with your handle in `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, and the `scripts/` folder. Then:
 
 ```powershell
-# Replaces every Shivam990q reference with your username
-pwsh -File scripts/set-repo-owner.ps1 -Owner my-github-handle
-
-# Then push
 git init -b main
 git add .
 git commit -m "Initial release"
