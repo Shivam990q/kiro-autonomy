@@ -5,7 +5,7 @@
 <!-- ░░░░░░░░░░░░░░░░░░░░░  ANIMATED HERO BANNER  ░░░░░░░░░░░░░░░░░░░░░ -->
 <p align="center">
   <a href="#top">
-    <img src="https://capsule-render.vercel.app/api?type=waving&color=0:FF6B35,50:F7B801,100:7B2CBF&height=240&section=header&text=Kiro%20Autonomy&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=Make%20Kiro%20IDE%20stop%20asking.%20Run%20the%20agent%20end-to-end.&descSize=18&descAlignY=60&animation=fadeIn" alt="Kiro Autonomy" />
+    <img src="https://capsule-render.vercel.app/api?type=waving&color=0:FF6B35,25:FFB627,50:FFD60A,75:FF4D8D,100:9D4EDD&height=240&section=header&text=Kiro%20Autonomy&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=Make%20Kiro%20IDE%20stop%20asking.%20Run%20the%20agent%20end-to-end.&descSize=18&descAlignY=60&descColor=ffffff&animation=fadeIn&stroke=ffffff&strokeWidth=0" alt="Kiro Autonomy" />
   </a>
 </p>
 
