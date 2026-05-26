@@ -5,8 +5,9 @@
 If you find a security issue with the installer or anything else in this repo, please **do not open a public issue**.
 
 Instead:
-1. Open a [GitHub Security Advisory](https://github.com/Shivam990q/kiro-autonomy/security/advisories/new) (preferred), **or**
-2. Email the maintainers (address in the repo's `MAINTAINERS.md` if present)
+1. Open a [GitHub Security Advisory](https://github.com/Shivam990q/kiro-autonomy/security/advisories/new) (preferred)
+
+The advisory channel is private and lets us coordinate a fix before public disclosure.
 
 Please include:
 - A description of the issue
