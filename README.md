@@ -63,8 +63,6 @@
 </p>
 
 <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=12,20,24&height=2&section=header" width="100%" alt="" />
-</p>
-
 
 ## <img src="https://media.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif" width="28" alt="" /> The Problem
 
@@ -105,17 +103,17 @@ Kiro's `trustedCommands` matcher **does** support a `"*"` wildcard. It's just hi
 <table>
 <tr>
 <td width="33%" align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/powershell/powershell-original.svg" width="48" /><br/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/powershell/powershell-original.svg" width="48" alt="PowerShell" /><br/>
   <b>One-click installer</b><br/>
   <sub>Configures it correctly without breaking your existing settings.</sub>
 </td>
 <td width="33%" align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" width="48" /><br/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" width="48" alt="Markdown" /><br/>
   <b>Verified internals</b><br/>
   <sub>The actual decision logic, dug out of the compiled extension.</sub>
 </td>
 <td width="33%" align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg" width="48" /><br/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/json/json-original.svg" width="48" alt="JSON" /><br/>
   <b>Recipe configs</b><br/>
   <sub>From cautious to maximum autonomy. Reversible. Backed up.</sub>
 </td>
