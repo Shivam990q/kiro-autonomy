@@ -28,6 +28,7 @@ scripts/read-github-cred.ps1
 # Test artifacts
 tests/.work/
 tests/output/
+**/.work/
 
 # Backups created by the installer (only relevant if user runs it locally)
 *.bak.*
